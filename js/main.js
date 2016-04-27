@@ -7,7 +7,7 @@ $(function() {
 		    height = 500 - margin.top - margin.bottom;
 
 		// variable to visualize
-		var measure = 'YEAR';
+		var measure = 'LEADING_CAUSES_OF_DEATH';
 		var color = d3.scale.category10();
 
 		// Wrapper div for the chart
@@ -32,7 +32,7 @@ $(function() {
 		var nest = d3.nest() // function that returns a function...
 					.key(function(d){return d.AGE_GROUP;})
 		var nestedData = nest.entries(data);
-		//console.log(nestedData);
+		console.log(nestedData);
 
 		 // Construct a treemap function that sizes elements based on the current `measure`, and
 		 // Make sure to specify how to retrieve the `children` from each element
@@ -54,7 +54,7 @@ $(function() {
 			nodes.enter()
 					 .append("div")
 					 .attr('class', 'node')
-					 .text(function(d){return d.LEADING_CAUSES_OF_DEATH}) // Set text: a big advantage of using divs over rects
+					 .text(function(d){return d.FATALITIES}) // Set text: a big advantage of using divs over rects
 				   .call(position); // This prevents a strange transition on enter()
 
 			// Update the nodes
