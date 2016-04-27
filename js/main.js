@@ -7,7 +7,7 @@ $(function() {
 		    height = 500 - margin.top - margin.bottom;
 
 		// variable to visualize
-		var measure = 'FATALITIES';
+		var measure = 'YEAR';
 		var color = d3.scale.category10();
 
 		// Wrapper div for the chart
@@ -28,10 +28,18 @@ $(function() {
 					.style("background", function(d) {return !d.values ? color(d.AGE_GROUP) : null; })
 		}
 
+		var year_data = []
+		var year = '2008';
+		console.log(data)
+		data.forEach(function(d) {
+			if (d.YEAR == year) {
+				year_data.push(d);
+			}
+		})
 		// Construct a nest function using `d3.nest`, and create a variable with your nested data
 		var nest = d3.nest() // function that returns a function...
 					.key(function(d){return d.AGE_GROUP;})
-		var nestedData = nest.entries(data);
+		var nestedData = nest.entries(year_data);
 		console.log(nestedData);
 
 		 // Construct a treemap function that sizes elements based on the current `measure`, and
@@ -67,11 +75,13 @@ $(function() {
 		// Listen to change events on the input elements
 		$("input").on('change', function() {
 			// Set your measure variable to the value (which is used in the draw funciton)
-			measure = $(this).val();
+			//measure = $(this).val();
+			measure = year_data;
 
 			// Draw your elements
 			draw();
  		});
+
 
  	});
  });

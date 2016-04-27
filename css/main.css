@@ -1,0 +1,35 @@
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css");
+
+
+.node {
+	position: absolute;
+	order: solid 1px white;
+  	font: 10px sans-serif;
+  	line-height: 12px;
+  	overflow: hidden;
+  	position: absolute;
+  	text-indent: 2px;
+  	color:white;
+}
+
+#vis {
+	position: relative;
+	padding-bottom: 100px;
+}
+
+.btn-group {
+	margin-bottom: 10px;
+}
+
+.axis line, .axis path {
+	fill: none;
+	stroke: #000000;
+}
+/*.title {
+	text-anchor: middle;
+}*/
+.label {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
