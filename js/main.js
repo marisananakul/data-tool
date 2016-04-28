@@ -8,7 +8,7 @@ $(function() {
 		    height = 500 - margin.top - margin.bottom;
 
 		// variable to visualize
-		var measure = 'YEAR';
+		var measure = 'FATALITIES';
 		var color = d3.scale.category10();
 
 		// Wrapper div for the chart
@@ -27,49 +27,52 @@ $(function() {
 					.style("background", function(d) {return !d.values ? color(d.AGE_GROUP) : null; })
 		}
 
-		//var nestedData;
-		//var year_selection = function() {
+		var nestedData;
+		var year = '2010';
+		var year_selection = function() {
 			var year_data = []
-			var year = ['1990'];
 		//console.log(data)
 
 			data.forEach(function(d) {
-				if (d.YEAR == year[0]) {
+				if (d.YEAR == year) {
 					year_data.push(d);
 				}
 			})
 
 			var nest = d3.nest()
 						.key(function(d){return d.AGE_GROUP;})
-			var nestedData = nest.entries(year_data);
-		//}
-		console.log(nestedData);
+			nestedData = nest.entries(year_data);
+			console.log(nestedData);
+
+		}
 
 		 var treemap = d3.layout.treemap() 
 		 		.size([width, height]) 
 		 		.sticky(true) 
-		 		.value(function(d) {return d[measure];}) 
+		 		.value(function(d) {return +d[measure];}) 
 		 		.children(function(d){return d.values;});
 
 		var draw = function() {
-			treemap.value(function(d) {return d[measure];});
-			var nodes = div.selectAll(".node").data(treemap.nodes({values:nestedData}));
+			year_selection();
+			console.log('nested data ', nestedData)
+			treemap.value(function(d) {return +d[measure];});
+			var nodes = div.selectAll(".node").data(treemap.nodes({values:nestedData}), function(d,i) {return i});
 			nodes.enter()
 					 .append("div")
 					 .attr('class', 'node')
 					 .text(function(d){return d.LEADING_CAUSES_OF_DEATH})
 				   .call(position);
-
+			console.log(nodes);
 			// Update the nodes
-			nodes.transition().duration(500).call(position);
+			nodes.transition().duration(500).style('opacity', .3).call(position);
 		}
 
 		draw();
 
 		// Listen to change events on the input elements
 		$("input").on('change', function() {
-			measure = $(this).val();
-			//measure = nestedData;
+			//measure = $(this).val();
+			year = '1991';
 			// Draw your elements
 			draw();
  		});
