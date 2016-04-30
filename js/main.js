@@ -1,17 +1,16 @@
 $(function() {
-	// Read in your data. On success, run the rest of your code
-	d3.csv("data/Leading_Causes_of_Death__1990-2010.csv", function(error, data){
-
+	d3.csv("data/formatted.csv", function(error, data){
+		console.log(data);
 		// Setting defaults
 		var margin = {top: 40, right: 10, bottom: 10, left: 10},
 		    width = 960 - margin.left - margin.right,
 		    height = 500 - margin.top - margin.bottom;
 
-		// variable to visualize
-		var measure = 'FATALITIES';
+		// starting year to measure
+		var measure = '1990';
 		var color = d3.scale.category10();
 
-		// Wrapper div for the chart
+		// Wrapper div for treemap
 		var div = d3.select('#vis')
 								.append("div")
 								.attr('height', 600)
@@ -28,22 +27,12 @@ $(function() {
 		}
 
 		var nestedData;
-		var year = '2010';
+		var year = '1990';
 		var year_selection = function() {
-			var year_data = []
-		//console.log(data)
-
-			data.forEach(function(d) {
-				if (d.YEAR == year) {
-					year_data.push(d);
-				}
-			})
 
 			var nest = d3.nest()
 						.key(function(d){return d.AGE_GROUP;})
-			nestedData = nest.entries(year_data);
-			console.log(nestedData);
-
+			nestedData = nest.entries(data);
 		}
 
 		 var treemap = d3.layout.treemap() 
@@ -54,7 +43,6 @@ $(function() {
 
 		var draw = function() {
 			year_selection();
-			console.log('nested data ', nestedData)
 			treemap.value(function(d) {return +d[measure];});
 			var nodes = div.selectAll(".node").data(treemap.nodes({values:nestedData}), function(d,i) {return i});
 			nodes.enter()
@@ -62,21 +50,19 @@ $(function() {
 					 .attr('class', 'node')
 					 .text(function(d){return d.LEADING_CAUSES_OF_DEATH})
 				   .call(position);
-			console.log(nodes);
 			// Update the nodes
-			nodes.transition().duration(500).style('opacity', .3).call(position);
+			nodes.transition().duration(500).call(position);
 		}
 
 		draw();
 
-		// Listen to change events on the input elements
+		// Listen to changing values
 		$("input").on('change', function() {
-			//measure = $(this).val();
-			year = '1991';
-			// Draw your elements
+			measure = $(this).val();
 			draw();
  		});
 
+		
 
  	});
  });
